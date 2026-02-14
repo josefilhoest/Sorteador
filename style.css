@@ -1,0 +1,143 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #171344;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+img {
+    width: 200px;
+    margin-bottom: 20px;
+    animation: rotate 10s linear infinite;
+
+
+}
+
+h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+    color: aqua;
+    text-shadow: #24221f 1px 0 10px;
+}
+
+p {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: rgb(236, 238, 238);
+    text-shadow: #24221f 1px 0 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+button {
+    padding: 10px 30px;
+    font-size: 18px;
+    background-color: #15c08d;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #79f0be;
+    color: #15c08d;
+}
+input[type="number"] {
+    padding: 15px 5px;
+    font-size: 18px;
+    background-color: #ebf1f0;
+    color: #444343;
+    border: 2px solid #302f2f;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+
+#result , .result {
+    padding: 10px 10px;
+    border-radius: 10px;
+    background-color: #1ac3cf;
+    font-size: 40px;
+    margin-top: 15px;
+    color: rgb(25, 10, 163);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+    
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    img {
+        width: 150px;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+    p {
+        font-size: 20px;
+    }
+        button {
+            font-size: 16px;
+            padding: 8px 20px;
+        }
+        input[type="number"] {
+            font-size: 16px;
+            padding: 8px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+    
+}
