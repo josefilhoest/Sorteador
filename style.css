@@ -78,13 +78,14 @@ section {
 }
 
 
+
 #result , .result {
     padding: 10px 10px;
     border-radius: 10px;
-    background-color: #1ac3cf;
+    background-color: #2512cf;
     font-size: 40px;
     margin-top: 15px;
-    color: rgb(25, 10, 163);
+    color: rgb(237, 236, 241);
     display: flex;
     flex-direction: column;
     align-items: center;

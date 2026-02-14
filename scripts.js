@@ -7,9 +7,10 @@ function generateNumber() {
     const result = Math.floor(Math.random() * (max - min + 1)) + min;
 
     
-
+    document.getElementById("result").textContent = " O número sorteado foi: " + result;        
     console.log("O número sorteado foi: " + result);
-    document.getElementById("result").textContent = " O número sorteado foi: " + result;
+    
 
  
 }
+
