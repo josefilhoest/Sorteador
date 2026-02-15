@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Ícones PWA - Dev Sorteador</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #171344, #2d1b69, #1a0f3d, #3d2175);
+            background-size: 400% 400%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            animation: gradientBg 15s ease infinite;
+        }
+
+        @keyframes gradientBg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #00ffff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #e0e0ff;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #00ffff;
+            font-size: 20px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(0, 255, 255, 0.5);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        .upload-area:hover {
+            border-color: #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .upload-area.dragover {
+            border-color: #00ffff;
+            background: rgba(0, 255, 255, 0.15);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .upload-text {
+            color: #e0e0ff;
+            margin-bottom: 10px;
+        }
+
+        .upload-hint {
+            color: #b0b0cc;
+            font-size: 14px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #15c08d, #00d9a3);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 20px rgba(21, 192, 141, 0.4);
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(21, 192, 141, 0.6);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .preview-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .preview-item canvas {
+            max-width: 100%;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .preview-label {
+            color: #00ffff;
+            font-size: 12px;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+        }
+
+        .status.success {
+            background: rgba(21, 192, 141, 0.2);
+            border: 1px solid rgba(21, 192, 141, 0.5);
+            color: #15c08d;
+            display: block;
+        }
+
+        .status.error {
+            background: rgba(255, 100, 100, 0.2);
+            border: 1px solid rgba(255, 100, 100, 0.5);
+            color: #ff6464;
+            display: block;
+        }
+
+        .status.loading {
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid rgba(0, 255, 255, 0.5);
+            color: #00ffff;
+            display: block;
+        }
+
+        .info-box {
+            background: rgba(93, 45, 255, 0.1);
+            border-left: 4px solid #5d2dff;
+            padding: 15px;
+            border-radius: 5px;
+            color: #e0e0ff;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .step {
+            color: #00ffff;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .downloads {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .download-btn {
+            display: inline-block;
+            margin: 5px;
+            padding: 8px 16px;
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid rgba(0, 255, 255, 0.5);
+            color: #00ffff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .next-steps {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+            color: #e0e0ff;
+            font-size: 14px;
+        }
+
+        .next-steps h3 {
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+
+        .next-steps ol {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Gerador de Ícones PWA</h1>
+        <p class="subtitle">Gere ícones perfeitos para seu app Dev Sorteador</p>
+
+        <div class="info-box">
+            <div class="step">ℹ️ Como funciona:</div>
+            Selecione uma imagem PNG (idealmente quadrada) e os ícones serão criados automaticamente em seus navegador!
+        </div>
+
+        <div class="section">
+            <h2>📤 Selecionar Imagem</h2>
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-text">👆 Clique ou arraste a imagem aqui</div>
+                <div class="upload-hint">PNG, JPG ou GIF (mín. 512x512 recomendado)</div>
+                <input type="file" id="fileInput" accept="image/*">
+            </div>
+        </div>
+
+        <div class="section" id="previewSection" style="display: none;">
+            <h2>👁️ Pré-visualização</h2>
+            <div class="preview">
+                <div class="preview-item">
+                    <canvas id="canvas192" width="192" height="192"></canvas>
+                    <div class="preview-label">icon-192.png</div>
+                </div>
+                <div class="preview-item">
+                    <canvas id="canvas512" width="512" height="512"></canvas>
+                    <div class="preview-label">icon-512.png</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <button id="generateBtn" disabled>🔄 Gerar Ícones</button>
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <div id="downloads" class="downloads">
+            <h2 style="color: #00ffff; margin-bottom: 15px;">📥 Baixar Ícones</h2>
+            <div id="downloadLinks"></div>
+        </div>
+
+        <div id="nextSteps" class="next-steps">
+            <h3>🚀 Próximos Passos</h3>
+            <ol>
+                <li>Coloque os arquivos PNG na pasta do seu projeto</li>
+                <li>Abra <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 3px;">index.html</code> em um navegador</li>
+                <li>Clique em "..." e selecione "Instalar App"</li>
+                <li>Seu PWA estará pronto! 📱</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const generateBtn = document.getElementById('generateBtn');
+        const statusDiv = document.getElementById('status');
+        const previewSection = document.getElementById('previewSection');
+        const downloadsDiv = document.getElementById('downloads');
+        const nextStepsDiv = document.getElementById('nextSteps');
+        const downloadLinksDiv = document.getElementById('downloadLinks');
+
+        let selectedImage = null;
+
+        // Upload area events
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFile(e.dataTransfer.files[0]);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files[0]) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                showStatus('error', '❌ Selecione um arquivo de imagem!');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                selectedImage = new Image();
+                selectedImage.onload = () => {
+                    previewImages();
+                    generateBtn.disabled = false;
+                    showStatus('success', `✅ Imagem carregada: ${selectedImage.width}x${selectedImage.height}px`);
+                };
+                selectedImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function previewImages() {
+            previewSection.style.display = 'block';
+            drawCanvasImage('canvas192');
+            drawCanvasImage('canvas512');
+        }
+
+        function drawCanvasImage(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+
+            // Limpar canvas
+            ctx.fillStyle = 'rgba(0, 0, 0, 0)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Calcular proporções
+            const maxSize = Math.min(selectedImage.width, selectedImage.height);
+            const x = (selectedImage.width - maxSize) / 2;
+            const y = (selectedImage.height - maxSize) / 2;
+
+            // Desenhar imagem redimensionada
+            ctx.drawImage(
+                selectedImage,
+                x, y, maxSize, maxSize,
+                0, 0, canvas.width, canvas.height
+            );
+        }
+
+        generateBtn.addEventListener('click', () => {
+            if (!selectedImage) return;
+
+            showStatus('loading', '⏳ Gerando ícones...');
+            generateBtn.disabled = true;
+
+            // Simular processamento
+            setTimeout(() => {
+                const icones = [
+                    { id: 'canvas192', nome: 'icon-192.png' },
+                    { id: 'canvas512', nome: 'icon-512.png' },
+                    { id: 'canvas192', nome: 'icon-192-maskable.png', maskable: true },
+                    { id: 'canvas512', nome: 'icon-512-maskable.png', maskable: true }
+                ];
+
+                downloadLinksDiv.innerHTML = '';
+
+                icones.forEach(config => {
+                    const canvas = document.getElementById(config.id);
+                    const link = document.createElement('a');
+                    link.href = canvas.toDataURL('image/png');
+                    link.download = config.nome;
+                    link.className = 'download-btn';
+                    link.innerHTML = `📥 ${config.nome}`;
+                    downloadLinksDiv.appendChild(link);
+                });
+
+                downloadsDiv.style.display = 'block';
+                nextStepsDiv.style.display = 'block';
+                showStatus('success', '✅ Ícones gerados com sucesso! Clique para baixar.');
+                generateBtn.disabled = false;
+            }, 500);
+        });
+
+        function showStatus(type, message) {
+            statusDiv.className = `status ${type}`;
+            statusDiv.innerHTML = message;
+        }
+    </script>
+</body>
+</html>
